@@ -14,6 +14,11 @@ mongoose.connect('mongodb+srv://123456QWERTY:123456QWERTY@cluster0.lzyerx2.mongo
 });
 
 app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  }),
+)
 
 app.use(cors());
 // Routes authentification
