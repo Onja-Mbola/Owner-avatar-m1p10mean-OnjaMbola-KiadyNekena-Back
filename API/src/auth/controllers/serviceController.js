@@ -15,19 +15,28 @@ exports.getServices = async (req, res) => {
   }
 };
 exports.createService = async (req, res) => {
-  try {
-    const data = await Service.create(req.body);
-    res.json(data);
-  } catch (error) {
-    return next(error);
-  }
-  // try{
-  //   const { name, price , time , image } = req.body;
-  //   const newService = new Service({ name, price , time , image });
-  //   await newService.save();
-  //   res.json({ success: true, message: 'Service added succesfully' });
-  // }catch(error){
-  //   next(error);
+  // try {
+  //   const data = await Service.create(req.body);
+  //   res.json(data);
+  // } catch (error) {
+  //   return next(error);
   // }
+  try{
+    const {name,price,time,image } = req.body;
+    const newService = new Service({ name, price , time , image });
+    await newService.save();
+    res.json({ success: true, message: req.body });
+  }catch(error){
+    next(error);
+  }
 };
 
+// exports.createService = async (req, res, next) => {
+//   try {
+//     const newService = await Service.create(req.body);
+//     const savedService = await newService.save();
+//     res.json(savedService);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
