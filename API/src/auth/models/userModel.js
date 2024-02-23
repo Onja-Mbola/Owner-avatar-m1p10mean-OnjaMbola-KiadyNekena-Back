@@ -6,13 +6,19 @@ function numeroValide(numero) {
 
 function estAdresseEmailValide(email) {
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
   return regexEmail.test(email);
 }
 
 const clientSchema = new mongoose.Schema({
-  firstName : String,
-  lastName : String,
+  firstName : {
+    type : String,
+    required: true,
+  },
+  lastName : {
+    type : String,
+    required: true,
+  },
   email : {
     type: String,
     validate: {
@@ -41,7 +47,8 @@ const clientSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false,
-  }
+  },
+  activationToken: String,
 
 });
 

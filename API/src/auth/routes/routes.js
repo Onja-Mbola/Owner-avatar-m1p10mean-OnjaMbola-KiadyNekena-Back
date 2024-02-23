@@ -10,7 +10,9 @@ router.post('/registerClient', authController.registerClient);
 router.post('/loginClient',authController.loginClient);
 
 // Route pour la validation du compte Client
-router.post('/validationClient',authController.validationClient);
+//router.post('/validationClient',authController.validationClient);
+router.get('/validationClient', authController.activateAccount); // Route pour l'activation du compte
+
 
 // Route pour la liste des clients
 router.get('/getClient',authController.getListeClient);
