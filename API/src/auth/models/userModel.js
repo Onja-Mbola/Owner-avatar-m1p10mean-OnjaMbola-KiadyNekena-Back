@@ -47,7 +47,8 @@ const clientSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false,
-  }
+  },
+  activationToken: String,
 
 });
 
