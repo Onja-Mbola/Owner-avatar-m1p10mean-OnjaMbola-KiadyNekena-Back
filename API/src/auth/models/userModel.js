@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 
 function numeroValide(numero) {
-  return numero.startsWith('+');
+  return numero.length === 10;
 }
+
 
 function estAdresseEmailValide(email) {
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,6 +31,10 @@ const clientSchema = new mongoose.Schema({
     required: true,
   },
   password : String,
+  salt: {
+    type: String,
+    required: true
+  },
   dateOfBirth : Date,
   sexe: {
     type: String,
@@ -39,7 +46,7 @@ const clientSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: numeroValide,
-      message: 'Le numéro doit commencer par le caractère "+"',
+      message: 'Le numéro doit contenir 10 caracteres',
     },
     required: true,
   },
@@ -51,5 +58,25 @@ const clientSchema = new mongoose.Schema({
   activationToken: String,
 
 });
+
+
+clientSchema.pre('save', async function (next) {
+  // Si le mot de passe n'est pas modifié, ou si le sel existe déjà, passez à l'étape suivante
+  if (!this.isModified('password') || this.salt) {
+    return next();
+  }
+
+  // Génération du sel
+  const salt = await bcrypt.genSalt(10);
+
+  // Hachage du mot de passe avec le sel
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+
+  // Stockage du sel et du mot de passe haché
+  this.salt = salt;
+  this.password = hashedPassword;
+  next();
+});
+
 
 module.exports = mongoose.model('Client', clientSchema);
