@@ -26,7 +26,12 @@ app.use('/api/auth', authRoutes);
 // Routes Service
 app.use('/api/service/', serviceRoutes);
 
-// Point d'entrée pour le serveur
-app.listen(port, () => {
+// Host
+app.listen(port, '192.168.88.18', () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Point d'entrée pour le serveur
+/*app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});*/

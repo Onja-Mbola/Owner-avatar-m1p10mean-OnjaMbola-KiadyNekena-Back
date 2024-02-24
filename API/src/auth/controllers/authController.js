@@ -1,6 +1,11 @@
 const Client = require('../models/userModel');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const secretToken = require('../config/configJwt');
+const configJwt = require('../config/configJwt');
+const authenticateToken = require("../middlewares/authJwt");
+const saltRounds = 10;
 
 
 // Fonction pour générer un code de validation aléatoire
@@ -12,7 +17,12 @@ function genererCodeValidation() {
 // Fonction pour générer un token d'activation aléatoire
 function genererTokenActivation() {
   const codeAleatoire = genererCodeValidation;
-  const token = jwt.sign({ codeAleatoire }, 'manjamanja');
+  const token = jwt.sign({ codeAleatoire }, secretToken.secret,
+    {
+      algorithm: 'HS256',
+      allowInsecureKeySizes: true,
+      expiresIn: 86400, // 24 hours
+    });
   return token;
 }
 
@@ -120,7 +130,7 @@ async function envoyerCodeValidationParEmail(email, objetDuMail, contenu) {
   try {
     // Utilisation de await pour s'assurer que l'envoi de l'email est terminé avant de passer à la suite
     await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully');
+    console.log('Email sent statusfully');
   } catch (error) {
     console.error('Error sending email:', error.message);
     // Vous pouvez gérer l'erreur ici, par exemple, en enregistrant l'erreur dans les journaux ou en prenant une action spécifique.
@@ -132,9 +142,20 @@ async function envoyerCodeValidationParEmail(email, objetDuMail, contenu) {
 
 // Contrôleur pour l'insertion d'un nouvel utilisateur
 exports.registerClient = async (req, res) => {
+  const { firstName, lastName, email, password, dateOfBirth, sexe, address, phoneNumber } = req.body;
+
+    // Vérifier si le corps de la requête contient les informations nécessaires
+   if (!req.body && !req.body.firstName && !req.body.lastName && !req.body.email && !req.body.password && !req.body.dateOfBirth && !req.body.sexe  && !req.body.address && !req.body.phoneNumber) {
+    return res.status(400).json({ success: false, message: 'Veuillez remplir tout les champs.' });
+  }
+
   try {
 
-    const { firstName, lastName, email, password, dateOfBirth, sexe, address, phoneNumber } = req.body;
+    // Génération du sel
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    // Hachage du mot de passe avec le sel
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const existingUser = await Client.findOne({ email });
     if (existingUser) {
@@ -149,7 +170,8 @@ exports.registerClient = async (req, res) => {
       firstName,
       lastName,
       email,
-      password,
+      password: hashedPassword,
+      salt,
       dateOfBirth,
       sexe,
       address,
@@ -161,7 +183,7 @@ exports.registerClient = async (req, res) => {
     await newClient.save();
 
     // Construire le lien d'activation
-    const activationLink = `http://localhost:3000/api/auth/validationClient?email=${email}&token=${activationToken}`;
+    const activationLink = `http://192.168.88.18:3000/api/auth/validationClient?email=${email}&token=${activationToken}`;
 
     // Générer le contenu de l'e-mail
     const contenuEmail = genererContenuEmailValidation(firstName, activationLink);
@@ -219,12 +241,12 @@ exports.activateAccount = async (req, res) => {
       return res.status(400).json({ message: 'Token d\'activation invalide ou expiré.' });
     }
 
-    if (client.isActivated) {
+    if (client.isVerified) {
       return res.status(400).json({ message: 'Compte déjà activé.' });
     }
 
     // Activer le compte
-    client.isActivated = true;
+    client.isVerified = true;
     client.activationToken = undefined;
 
     await client.save();
@@ -238,30 +260,69 @@ exports.activateAccount = async (req, res) => {
 
 
 exports.loginClient = async (req, res) => {
+  // Vérifier si le corps de la requête contient les informations nécessaires
+  if (!req.body || !req.body.email || !req.body.password) {
+    return res.status(400).json({ success: false, message: 'Email et mot de passe requise.' });
+  }
+
   const { email, password } = req.body;
-  const user = await Client.findOne({ email, password });
 
-  if (!user) {
-    return res.json({ success: false, message: 'Invalid username or password.' });
+  try {
+    const user = await Client.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
+    }
+
+    if (!user.isVerified) {
+      return res.status(403).json({ success: false, message: 'Utilisateur non vérifié. Veuillez valider votre compte.' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
+    }
+
+    console.log('Valeur de isVerified dans la base de données :', user.isVerified);
+
+    const token = jwt.sign({ email }, configJwt.secret);
+    res.status(200).json({ success: true, client_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email, token });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
   }
-
-  if (!user.isVerified) {
-    return res.json({ success: false, message: 'Utilisateur non verifier. Veuillez valider votre compte.' });
-  }
-
-  const token = jwt.sign({ email }, 'manjamanja');
-  res.json({ success: true, token });
 };
+
+
+
+
 
 // Fonction pour récupérer la liste des utilisateurs
 exports.getListeClient = async (req, res) => {
   try {
     const utilisateurs = await Client.find();
-    res.json({ success: true, utilisateurs });
+    res.status(200).json({ success: true, utilisateurs });
   } catch (erreur) {
     res.status(500).json({ success: false, message: 'Erreur lors de la récupération des utilisateurs.' });
   }
 };
+
+
+//Fonction qui affiche les information du client
+exports.getInfoClient = async (req, res) => {
+  try {
+    const email = req.client.email;
+    const infoClient = await Client.findOne({ email: email });
+    if (!infoClient) {
+      return res.status(401).json({ success: false, message: 'Utilisateur inexistant.' });
+    }
+    res.status(200).json({ success: true, infoClient});
+  } catch (erreur) {
+    console.log(erreur);
+    res.status(500).json({ success: false, message: 'Erreur lors de la récupération de vos informations.' });
+  }
+}
 
 
 // Fonction pour envoyer e-mail
@@ -289,7 +350,7 @@ async function envoyerEmail(email,subject, message) {
   try {
     // Utilisation de await pour s'assurer que l'envoi de l'email est terminé avant de passer à la suite
     await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully');
+    console.log('Email sent statusfully');
   } catch (error) {
     console.error('Error sending email:', error.message);
     // Vous pouvez gérer l'erreur ici, par exemple, en enregistrant l'erreur dans les journaux ou en prenant une action spécifique.

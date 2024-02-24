@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/authController');
+const authJwt = require('../middlewares/authJwt');
 
 const router = express.Router();
 
@@ -16,6 +17,11 @@ router.get('/validationClient', authController.activateAccount); // Route pour l
 
 // Route pour la liste des clients
 router.get('/getClient',authController.getListeClient);
+
+
+// Route pour avoir l'information Client
+router.get("/getInfoClient", authJwt, authController.getInfoClient);
+
 
 
 module.exports = router;
