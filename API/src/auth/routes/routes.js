@@ -23,5 +23,9 @@ router.get('/getClient',authController.getListeClient);
 router.get("/getInfoClient", authJwt, authController.getInfoClient);
 
 
+// Route pour modifier l'information Client
+router.put("/modifInfoClient", authJwt, authController.modifGeneral);
+
+
 
 module.exports = router;

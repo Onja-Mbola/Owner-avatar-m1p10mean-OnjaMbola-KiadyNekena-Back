@@ -1,22 +1,23 @@
 const jwt = require("jsonwebtoken");
 const configJwt = require("../config/configJwt");
 const Client = require("../models/userModel");
+const mongoose = require('mongoose');
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ success: false, message: "Format de jeton non valide." });
+    return res.status(401).json({ success: false, message: "Format de jeton non valide ou vous n'etes pas connecter." });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, configJwt.secret);
-    const email = decoded.email;
+    const _id = decoded._id;
 
-    // Récupérer les informations du client depuis la base de données
-    const client = await Client.findOne({ email });
+    // Rechercher directement par _id
+    const client = await Client.findOne({ _id });
 
     if (!client) {
       return res.status(404).json({ success: false, message: "Client non trouvé." });

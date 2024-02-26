@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const secretToken = require('../config/configJwt');
+const mongoose = require('mongoose');
 const configJwt = require('../config/configJwt');
 const authenticateToken = require("../middlewares/authJwt");
 const saltRounds = 10;
@@ -269,6 +270,7 @@ exports.loginClient = async (req, res) => {
 
   try {
     const user = await Client.findOne({ email });
+    const _id = user.id;
 
     if (!user) {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
@@ -284,9 +286,8 @@ exports.loginClient = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
     }
 
-    console.log('Valeur de isVerified dans la base de données :', user.isVerified);
 
-    const token = jwt.sign({ email }, configJwt.secret);
+    const token = jwt.sign({ _id }, configJwt.secret);
     res.status(200).json({ success: true, client_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email, token });
   } catch (error) {
     console.error('Error during login:', error);
@@ -312,17 +313,42 @@ exports.getListeClient = async (req, res) => {
 //Fonction qui affiche les information du client
 exports.getInfoClient = async (req, res) => {
   try {
-    const email = req.client.email;
-    const infoClient = await Client.findOne({ email: email });
+    const _id = req.client._id;
+    const infoClient = await Client.findOne({ _id: _id });
     if (!infoClient) {
       return res.status(401).json({ success: false, message: 'Utilisateur inexistant.' });
     }
-    res.status(200).json({ success: true, infoClient});
+    res.status(200).json({ success: true, _id : infoClient._id, firstName : infoClient.firstName, lastName : infoClient.lastName, email : infoClient.email, sexe : infoClient.sexe, address : infoClient.address, phoneNumber : infoClient.phoneNumber});
   } catch (erreur) {
     console.log(erreur);
     res.status(500).json({ success: false, message: 'Erreur lors de la récupération de vos informations.' });
   }
 }
+
+//Fonction modif generaliser
+exports.modifGeneral = async (req, res) => {
+  try {
+    const _id = req.client._id;
+    const nomModel = req.body.models;
+    const modifications = req.body.modification;
+
+    if (!_id || !nomModel || !modifications) {
+      return res.status(400).json({ success: false, message: 'Paramètres invalides.' });
+    }
+
+    const model = mongoose.model(nomModel);
+    const result = await model.updateOne({ _id }, modifications);
+
+    if (result.modifiedCount > 0) {
+      return res.status(200).json({ success: true, message: 'Document mis à jour avec succès.' });
+    } else {
+      return res.status(404).json({ success: false, message: 'Aucun document mis à jour.' });
+    }
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: `Erreur lors de la mise à jour : ${error.message}` });
+  }
+};
 
 
 // Fonction pour envoyer e-mail
