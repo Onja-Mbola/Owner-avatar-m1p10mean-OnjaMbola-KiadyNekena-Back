@@ -24,32 +24,45 @@
           <div class="text-center text-muted mb-4">
             <small>Connexion</small>
           </div>
-          <form role="form">
-            <div class="form-group mb-3">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3" [ngClass]="{'focused':focus===true}">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" placeholder="Email" type="email">
+                <input class="form-control" placeholder="Email" type="email" formControlName="email" (focus)="focus=true" (blur)="focus=false">
+              </div>
+              <!-- error -->
+              <div class="text-danger" *ngIf="submitted && myForm['email'].errors?.required">
+                Veuillez entrer votre adresse mail
+              </div>
+              <div class="text-danger" *ngIf="submitted && myForm['email'].errors?.email">
+                Veuillez entrer une adresse mail valide
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'focused':focus1===true}">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" placeholder="Password" type="password">
+                <input class="form-control" placeholder="Mot de passe" type="password" formControlName="password" (focus)="focus1=true" (blur)="focus1=false">
               </div>
+
+              <div class="text-danger" *ngIf="submitted && myForm['password'].hasError('required')">
+                Veuillez entrer un mot de passe!
+              </div>
+
             </div>
             <div class="custom-control custom-control-alternative custom-checkbox">
               <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
               <label class="custom-control-label" for=" customCheckLogin">
-                <span class="text-muted">Remember me</span>
+                <span>Se souvenir de moi</span>
               </label>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-primary my-4">Sign in</button>
+              <button type="submit" class="btn btn-primary my-4">Se Connecter</button>
             </div>
+
           </form>
         </div>
       </div>
