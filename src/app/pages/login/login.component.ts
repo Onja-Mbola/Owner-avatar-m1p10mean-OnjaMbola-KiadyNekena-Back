@@ -83,13 +83,14 @@ export class LoginComponent implements OnInit {
           this.isLoggedIn = true;
           // this.roles = this.tokenStorage.getUser().roles;
           // this.reloadPage();
+          window.location.href='/';
 
           console.log('Next level created!');
           // Redirect to home ("/") route
-            this.ngZone.run(() => {
-                this.router.navigateByUrl('/dashboard');
-                this.showSuccess("Vous etes connecte");
-            });
+            // this.ngZone.run(() => {
+            //     this.router.navigateByUrl('/dashboard');
+            //     this.showSuccess("Vous etes connecte");
+            // });
         },
         error: (e) => {
           this.errorMessage = e.message;

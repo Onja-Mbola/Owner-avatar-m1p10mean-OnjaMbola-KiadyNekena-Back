@@ -6,11 +6,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes =[
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   }, {
     path: '',
@@ -19,10 +20,6 @@ const routes: Routes =[
       {
         path: '',
         loadChildren: () => import('src/app/layouts/admin-layout/admin-layout.module').then(m => m.AdminLayoutModule)
-      },
-      {
-        path: 'dashboard', // Add a route for the dashboard component
-        component: DashboardComponent,
       },
     ]
   }, {
@@ -45,7 +42,7 @@ const routes: Routes =[
     CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes,{
-      useHash: true
+      useHash: false
     })
   ],
   exports: [

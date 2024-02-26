@@ -19,6 +19,9 @@ import { ToastsContainer } from './toast/toasts.container.component';
 
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './pages/login/login.component';
+import { AuthGuard } from './auth.guard';
+import { NoAuthGuard } from './noauth.guard';
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -39,7 +42,7 @@ import { LoginComponent } from './pages/login/login.component';
     AuthLayoutComponent,
     LoginComponent
   ],
-  providers: [AuthService],
+  providers: [AuthService,AuthGuard,NoAuthGuard,UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
