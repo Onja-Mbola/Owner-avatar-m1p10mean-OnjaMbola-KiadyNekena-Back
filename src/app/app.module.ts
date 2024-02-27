@@ -22,6 +22,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './noauth.guard';
 import { UserService } from './services/user.service';
+import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { UserService } from './services/user.service';
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
-    LoginComponent
+    LoginComponent,
+    LoginAdminComponent
   ],
   providers: [AuthService,AuthGuard,NoAuthGuard,UserService],
   bootstrap: [AppComponent]

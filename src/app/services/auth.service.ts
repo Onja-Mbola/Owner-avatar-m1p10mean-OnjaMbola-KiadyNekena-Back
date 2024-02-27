@@ -15,8 +15,8 @@ const httpOptions = {
 })
 
 export class AuthService {
-  // baseUri: string = 'http://192.168.88.18:3000/api/auth';
-  baseUri: string = 'http://localhost:3000/api/auth';
+  baseUri: string = 'http://192.168.88.14:3000/api/auth';
+  // baseUri: string = 'http://localhost:3000/api/auth';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   private isAuthenticated = false;
 
@@ -27,6 +27,14 @@ export class AuthService {
   // Login
   loginClient(credentials): Observable<any> {
     let url = `${this.baseUri}/loginClient`;
+    return this.http.post(url, {
+      email: credentials.email,
+      password: credentials.password
+    },httpOptions)
+    }
+
+    loginAdmin(credentials): Observable<any> {
+    let url = `${this.baseUri}/loginEmploye`;
     return this.http.post(url, {
       email: credentials.email,
       password: credentials.password

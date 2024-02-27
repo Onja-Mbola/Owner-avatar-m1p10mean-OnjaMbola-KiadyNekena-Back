@@ -107,19 +107,17 @@ export class UserProfileComponent implements OnInit {
     } else {
       const formData = { ...this.profileForm.value };
 
-      // Convertir la chaîne de caractères en objet Date
-      formData.dateOfBirth = new Date(formData.dateOfBirth);
-
       return this.userService.updateProfile(formData).subscribe({
         complete: () => {
           console.log('Next level created!'),
           // Redirect to home ("/") route
             this.ngZone.run(() => {
-                this.router.navigateByUrl('/');
+                // window.location.reload();
+                this.router.navigateByUrl('/user-profile')
 
                 // Display an alert after redirection
                 // alert('Verify your email.'); // You might want to use a more user-friendly notification method
-                this.showSuccess("Votre compte a ete cree , veuillez verifier votre mail");
+                this.showSuccess("Votre profil a ete modifie");
             });
         },
         error: (e) => {
