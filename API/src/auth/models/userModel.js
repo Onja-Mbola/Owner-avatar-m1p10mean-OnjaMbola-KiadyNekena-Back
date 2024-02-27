@@ -16,7 +16,7 @@ function estAdresseEmailValide(email) {
 const clientSchema = new mongoose.Schema({
   _id : {
     type : mongoose.Schema.Types.ObjectId,
-    required: true,
+    auto: true,
   },
   firstName : {
     type : String,
@@ -27,7 +27,6 @@ const clientSchema = new mongoose.Schema({
     required: true,
   },
   photo : {
-    title: String,
     data: Buffer,
     contentType: String,
   },

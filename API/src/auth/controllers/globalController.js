@@ -1,31 +1,45 @@
-const express = require('express');
-const multer = require('multer');
 const employe = require('../models/employeModel');
 const client = require('../models/userModel');
 
 
-// Configuration de multer pour stocker les fichiers
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-// Fonction pour télécharger une photo
-async function uploadPhoto(req, res) {
+exports.uploadPhotoClient = async (req, res) => {
   try {
-    const newPhoto = new Photo({
-      title: req.body.title,
-      image: {
-        data: req.file.buffer,
-        contentType: req.file.mimetype
-      }
-    });
+    const _id = req.client._id;
+    const photoData = req.body.photoData;
+    const contentType = req.body.contentType;
 
-    await newPhoto.save();
-    res.status(201).json({ success: true, message: 'Photo téléchargée avec succès.' });
+    // Mise à jour du champ photo dans le modèle Employe
+    const result = await client.updateOne({ _id }, { $set: { photo: { data: photoData, contentType } } });
+
+    if (result.modifiedCount > 0) {
+      return res.status(200).json({ success: true, message: 'Photo mise à jour avec succès.' });
+    } else {
+      return res.status(404).json({ success: false, message: 'Aucune photo mise à jour.' });
+    }
   } catch (error) {
     console.error('Erreur lors du téléchargement de la photo :', error);
-    res.status(500).json({ success: false, message: 'Erreur lors du téléchargement de la photo.' });
+    return res.status(500).json({ success: false, message: `Erreur lors du téléchargement de la photo : ${error.message}` });
   }
-}
+};
 
 
-module.exports = router;
+
+exports.uploadPhoto = async (req, res) => {
+  try {
+    const _id = req.client._id;
+    const photoData = req.body.photoData;
+    const contentType = req.body.contentType;
+
+    // Mise à jour du champ photo dans le modèle Employe
+    const result = await employe.updateOne({ _id }, { $set: { photo: { data: photoData, contentType } } });
+
+    if (result.modifiedCount > 0) {
+      return res.status(200).json({ success: true, message: 'Photo mise à jour avec succès.' });
+    } else {
+      return res.status(404).json({ success: false, message: 'Aucune photo mise à jour.' });
+    }
+  } catch (error) {
+    console.error('Erreur lors du téléchargement de la photo :', error);
+    return res.status(500).json({ success: false, message: `Erreur lors du téléchargement de la photo : ${error.message}` });
+  }
+};
