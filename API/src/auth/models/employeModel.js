@@ -13,7 +13,7 @@ function estAdresseEmailValide(email) {
   return regexEmail.test(email);
 }
 
-const clientSchema = new mongoose.Schema({
+const employeSchema = new mongoose.Schema({
   _id : {
     type : mongoose.Schema.Types.ObjectId,
     required: true,
@@ -59,6 +59,16 @@ const clientSchema = new mongoose.Schema({
     },
     required: true,
   },
+  salaire: {
+    type: Number,
+    default: 0
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'employe'],
+    required: true,
+    message: 'Role invalide',
+  },
   codeValidation: String,
   isVerified: {
     type: Boolean,
@@ -69,7 +79,7 @@ const clientSchema = new mongoose.Schema({
 });
 
 
-clientSchema.pre('save', async function (next) {
+employeSchema.pre('save', async function (next) {
   // Si le mot de passe n'est pas modifié, ou si le sel existe déjà, passez à l'étape suivante
   if (!this.isModified('password') || this.salt) {
     return next();
@@ -88,4 +98,4 @@ clientSchema.pre('save', async function (next) {
 });
 
 
-module.exports = mongoose.model('Client', clientSchema);
+module.exports = mongoose.model('Employe', employeSchema);

@@ -1,3 +1,5 @@
 module.exports = {
-  secret: "manjamanja"
+  secret: "manjamanja",
+  secretAdmin: "manjamanja",
+  lien: '192.168.88.18',
 };

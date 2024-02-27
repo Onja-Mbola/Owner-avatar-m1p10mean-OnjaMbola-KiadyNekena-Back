@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const authRoutes = require('./auth/routes/routes');
 const serviceRoutes = require('./auth/routes/service.routes');
+const lien = require('./auth/config/configJwt');
 
 const app = express();
 const port = 3000;
@@ -27,7 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/service/', serviceRoutes);
 
 // Host
-app.listen(port, '192.168.88.18', () => {
+app.listen(port, lien.lien, () => {
   console.log(`Server is running on port ${port}`);
 });
 
