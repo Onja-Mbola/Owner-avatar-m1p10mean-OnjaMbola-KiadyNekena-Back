@@ -24,63 +24,69 @@ export class UserProfileComponent implements OnInit {
     focus1;
     focus2;
     model: any;
-    userdata: any;
+    currentUser: any;
+    trydata: any;
 
-  currentUser: any;
   constructor(
     public fb: FormBuilder,
     private router: Router,
     private ngZone: NgZone,
     private userService: UserService,
     public toastService: ToastService,
-    private token: TokenStorageService,
-    private user: UserService
-
-    ) {
-
-    }
+    private token: TokenStorageService
+    ) {}
 
    ngOnInit() {
-    this.getMyProfile();
     this.currentUser = this.token.getUser();
-  }
-  async getMyProfile(){
-    // this.user.getProfile().subscribe({
-    //   next: (data) => {
-    //     this.userdata = data;
-    //     console.log(data);
-    //   },
-    //   error: (e) => {
-    //     console.log(e);
-    //     // this.showDanger(e.error.message);
-    //   },
-
-    // })
-    try {
-      this.userdata = await this.user.getProfile().toPromise();
-
-    } catch (e) {
-      console.error(e);
-      // Handle error as needed
-      // this.showDanger(e.error.message);
-    }
-  }
-  mainForm() {
+    this.updateProfile();
+    this.getMyProfile();
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: [
-        '',
-        [
-           Validators.required,
-           Validators.email,
-        ],
-     ],
-      password: ['', [Validators.required,passwordStrengthValidator(3)]],
-      dateOfBirth: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required, phoneNumberValidator]],
+          lastName: ['', [Validators.required]],
+          email: [
+            '',
+            [
+               Validators.required,
+               Validators.email,
+            ],
+         ],
+          address: ['', [Validators.required]],
+          phoneNumber: ['', [Validators.required, phoneNumberValidator]],
     });
+  }
+  updateProfile() {
+    this.profileForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+          lastName: ['', [Validators.required]],
+          email: [
+            '',
+            [
+               Validators.required,
+               Validators.email,
+            ],
+         ],
+          address: ['', [Validators.required]],
+          phoneNumber: ['', [Validators.required, phoneNumberValidator]],
+    });
+  }
+   getMyProfile(){
+    this.userService.getProfile().subscribe((data) => {
+      this.trydata = data;
+      this.profileForm.setValue({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+      });
+    });
+    // try {
+    //   this.userdata = await this.user.getProfile().toPromise();
+    // } catch (e) {
+    //   console.error(e);
+    //   // Handle error as needed
+    //   // this.showDanger(e.error.message);
+    // }
   }
   showSuccess(text) {
 		this.toastService.show(text, { classname: 'bg-success text-light m-3 p-3 ', delay: 10000 });

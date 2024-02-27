@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   public listTitles: any[];
   public location: Location;
   currentUser: any;
-  constructor(location: Location,  private element: ElementRef, private router: Router,private token: TokenStorageService) {
+  constructor(location: Location,  private element: ElementRef, private router: Router,private token: TokenStorageService ) {
     this.location = location;
   }
 

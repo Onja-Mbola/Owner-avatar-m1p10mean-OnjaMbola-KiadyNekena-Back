@@ -26,11 +26,15 @@ export class UserService {
 
   }
 
-  getProfile() {
+  getProfile(): Observable<any> {
     const headers = {
       Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
     };
-    return this.http.get(`${this.baseUri}/getInfoClient`, { headers });
+    return this.http.get(`${this.baseUri}/getInfoClient`, { headers: headers }).pipe(
+      map((res: Response) => {
+        return res || {};
+      })
+    );
   }
   updateProfile(data): Observable<any> {
     let url = `${this.baseUri}/updateProfile`;
