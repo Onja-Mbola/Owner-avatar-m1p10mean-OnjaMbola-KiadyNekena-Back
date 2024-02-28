@@ -1,4 +1,4 @@
-const Employe = require('../models/userModel');
+const Employe = require('../models/employeModel');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -17,7 +17,7 @@ function genererCodeValidation() {
 
 // Fonction pour générer un token d'activation aléatoire
 function genererTokenActivation() {
-  const codeAleatoire = client.genererCodeValidation;
+  const codeAleatoire = genererCodeValidation;
   const token = jwt.sign({ codeAleatoire }, secretToken.secret,
     {
       algorithm: 'HS256',
@@ -137,12 +137,12 @@ async function envoyerCodeValidationParEmail(email, objetDuMail, contenu) {
 }
 
 
-// Fonction pour valider le compte du client
+// Fonction pour valider le compte de l'utilisateur
 exports.activateAccount = async (req, res) => {
   try {
     const { email, token } = req.query;
 
-    const client = await Client.findOne({ email, activationToken: token });
+    const client = await Employe.findOne({ email, activationToken: token });
 
     if (!client) {
       return res.status(400).json({ message: 'Token d\'activation invalide ou expiré.' });
@@ -170,7 +170,7 @@ exports.registerEmploye = async (req, res) => {
   const { firstName, lastName, email, password, dateOfBirth, sexe, address, phoneNumber, salaire, role } = req.body;
 
     // Vérifier si le corps de la requête contient les informations nécessaires
-   if (!req.body && req.client.role !== "admin" && !req.body.firstName && !req.body.lastName && !req.body.email && !req.body.password && !req.body.dateOfBirth && !req.body.sexe  && !req.body.address && !req.body.phoneNumber && !req.body.salaire && !req.body.role) {
+   if (!req.body && !req.body.firstName && req.client.role !== "admin" && !req.body.lastName && !req.body.email && !req.body.password && !req.body.dateOfBirth && !req.body.sexe  && !req.body.address && !req.body.phoneNumber && !req.body.salaire && !req.body.role) {
     return res.status(400).json({ success: false, message: 'Veuillez remplir tout les champs.' });
   }
 
@@ -226,7 +226,7 @@ exports.registerEmploye = async (req, res) => {
 }
 
 
-exports.loginClient = async (req, res) => {
+exports.loginEmploye = async (req, res) => {
   // Vérifier si le corps de la requête contient les informations nécessaires
   if (!req.body || !req.body.email || !req.body.password) {
     return res.status(400).json({ success: false, message: 'Email et mot de passe requise.' });
@@ -235,8 +235,7 @@ exports.loginClient = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await Client.findOne({ email });
-    const _id = user.id;
+    const user = await Employe.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
@@ -245,8 +244,9 @@ exports.loginClient = async (req, res) => {
     if (!user.isVerified) {
       return res.status(403).json({ success: false, message: 'Utilisateur non vérifié. Veuillez valider votre compte.' });
     }
-
+    const _id = user._id;
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(_id);
 
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
@@ -254,7 +254,7 @@ exports.loginClient = async (req, res) => {
 
 
     const token = jwt.sign({ _id }, configJwt.secretAdmin);
-    res.status(200).json({ success: true, client_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email, token });
+    res.status(200).json({ success: true, employe_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email, role: user.role, token });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ success: false, message: 'Internal server error.' });
@@ -277,11 +277,11 @@ exports.getListeEmploye = async (req, res) => {
 };
 
 
-//Fonction qui affiche les information du client
+//Fonction qui affiche les information de l'Employe
 exports.getInfoEmploye = async (req, res) => {
   try {
     const _id = req.client._id;
-    const infoClient = await Client.findOne({ _id: _id });
+    const infoClient = await Employe.findOne({ _id: _id });
     if (!infoClient) {
       return res.status(401).json({ success: false, message: 'Utilisateur inexistant.' });
     }
@@ -293,7 +293,7 @@ exports.getInfoEmploye = async (req, res) => {
 }
 
 
-//Fonction qui affiche les information du client
+//Fonction qui affiche les information de l' Empolye
 exports.getInfoEmployebyId = async (req, res) => {
   try {
     if (!req.body || !req.body._id ) {
