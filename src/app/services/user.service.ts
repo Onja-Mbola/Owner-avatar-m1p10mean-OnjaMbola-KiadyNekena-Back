@@ -15,7 +15,7 @@ const httpOptions = {
 })
 
 export class UserService {
-  // baseUri: string = 'http://192.168.88.18:3000/api/auth';
+  // baseUri: string = 'http://192.168.88.14:3000/api/auth';
   baseUri: string = 'http://localhost:3000/api/auth';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -37,8 +37,16 @@ export class UserService {
     );
   }
   updateProfile(data): Observable<any> {
-    let url = `${this.baseUri}/updateProfile`;
-    return this.http.post(url, data, httpOptions);
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    let url = `${this.baseUri}/modifInfoClient`;
+    const datachange = {
+      models: 'Client',
+      modification: { $set: data }
+    };
+    return this.http
+      .put(url, datachange, { headers: headers });
   }
 
 
