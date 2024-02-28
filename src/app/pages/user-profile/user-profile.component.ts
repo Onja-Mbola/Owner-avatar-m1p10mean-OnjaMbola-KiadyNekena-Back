@@ -8,6 +8,9 @@ import { ToastService } from '../../toast/toast.service';
 
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { UserService } from 'src/app/services/user.service';
+import { throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -18,6 +21,8 @@ export class UserProfileComponent implements OnInit {
 
     submitted = false;
     profileForm: FormGroup;
+    imageUrl: string;
+    imageSource: string;
 
     test : Date = new Date();
     focus;
@@ -33,11 +38,32 @@ export class UserProfileComponent implements OnInit {
     private ngZone: NgZone,
     private userService: UserService,
     public toastService: ToastService,
-    private token: TokenStorageService
+    private token: TokenStorageService,
+    private http: HttpClient
+
+
     ) {}
 
    ngOnInit() {
     this.currentUser = this.token.getUser();
+    this.imageUrl = `http://localhost:3000/api/auth/getPhoto/${this.token.getUser().employe_id}`;
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    this.http.get(this.imageUrl, { responseType: 'blob', headers })
+    .subscribe(
+      (data) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.imageSource = reader.result as string;
+        };
+        reader.readAsDataURL(data);
+      },
+      (error) => {
+        console.error('Erreur lors du chargement de l\'image :', error);
+      }
+    );
+    console.log(this.imageUrl);
     this.updateProfile();
     this.getMyProfile();
     this.profileForm = this.fb.group({
@@ -54,6 +80,8 @@ export class UserProfileComponent implements OnInit {
           phoneNumber: ['', [Validators.required, phoneNumberValidator]],
     });
   }
+
+
 
   //modification photo de profil
   onFileSelected(event: any): void {
@@ -140,5 +168,48 @@ export class UserProfileComponent implements OnInit {
       });
     }
   }
+
+  status: "initial" | "uploading" | "success" | "fail" = "initial"; // Variable to store file status
+  file: File | null = null; // Variable to store file
+
+  // On file Select
+  onChange(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.status = "initial";
+      this.file = file;
+    }
+  }
+
+  onUpload() {
+    if (this.file) {
+      const formData = new FormData();
+
+      const headers = {
+        Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+      };
+
+      formData.append('file', this.file, this.file.name);
+
+
+      const upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoEmploye", formData, { headers });
+
+      this.status = 'uploading';
+
+      console.log(this.file.arrayBuffer);
+
+      upload$.subscribe({
+        next: () => {
+          this.status = 'success';
+        },
+        error: (error: any) => {
+          this.status = 'fail';
+          return throwError(() => error);
+        },
+      });
+    }
+  }
+
 
 }
