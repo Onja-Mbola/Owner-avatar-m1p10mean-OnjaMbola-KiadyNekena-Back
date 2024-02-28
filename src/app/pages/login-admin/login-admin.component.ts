@@ -9,7 +9,7 @@ import { ToastService } from '../../toast/toast.service';
 
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-login-admin',
   templateUrl: './login-admin.component.html',
   styleUrls: ['./login-admin.component.scss']
 })

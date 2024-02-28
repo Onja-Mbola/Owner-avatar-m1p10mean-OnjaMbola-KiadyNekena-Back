@@ -22,8 +22,12 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './noauth.guard';
 import { UserService } from './services/user.service';
-import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
+import { ServicesListComponent } from './pages/admin-services/services-list/services-list.component';
+import { ServicesCreateComponent } from './pages/admin-services/services-create/services-create.component';
+import { ServicesEditComponent } from './pages/admin-services/services-edit/services-edit.component';
+import { CommonModule } from '@angular/common';
+import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
 
 
 @NgModule({
@@ -37,6 +41,7 @@ import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin
     RouterModule,
     AppRoutingModule,
     ToastsContainer,
+    CommonModule
   ],
   declarations: [
     AppComponent,
@@ -44,7 +49,10 @@ import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin
     AuthLayoutComponent,
     LoginComponent,
     LoginAdminComponent,
-    DashboardAdminComponent
+    DashboardAdminComponent,
+    ServicesListComponent,
+    ServicesCreateComponent,
+    ServicesEditComponent
   ],
   providers: [AuthService,AuthGuard,NoAuthGuard,UserService],
   bootstrap: [AppComponent]
