@@ -246,6 +246,7 @@ exports.loginEmploye = async (req, res) => {
     }
     const _id = user._id;
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(_id);
 
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });

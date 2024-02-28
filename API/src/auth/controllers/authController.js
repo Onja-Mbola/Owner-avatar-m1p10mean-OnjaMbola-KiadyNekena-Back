@@ -271,7 +271,6 @@ exports.loginClient = async (req, res) => {
 
   try {
     const user = await Client.findOne({ email });
-    const _id = user.id;
 
     if (!user) {
       return res.status(401).json({ success: false, message: 'Email ou Mot de passe invalide.' });
@@ -281,6 +280,7 @@ exports.loginClient = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Utilisateur non vérifié. Veuillez valider votre compte.' });
     }
 
+    const _id = user.id;
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {

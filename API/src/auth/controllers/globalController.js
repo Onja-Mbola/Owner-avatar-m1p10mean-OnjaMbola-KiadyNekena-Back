@@ -1,15 +1,36 @@
-const employe = require('../models/employeModel');
-const client = require('../models/userModel');
+const multer = require('multer');
+const Employe = require('../models/employeModel');
 
 
-exports.uploadPhotoClient = async (req, res) => {
+const filtreImage = (req, file, cb) => {
+  const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (allowedFormats.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Format de fichier non pris en charge. Veuillez télécharger une image JPEG ou JPG.'), false);
+  }
+};
+
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  fileFilter: filtreImage,
+});
+
+exports.upload = upload;
+
+
+exports.uploadImage = async (req, res) => {
   try {
-    const _id = req.client._id;
-    const photoData = req.body.photoData;
-    const contentType = req.body.contentType;
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Aucune image téléchargée.' });
+    }
 
-    // Mise à jour du champ photo dans le modèle Employe
-    const result = await client.updateOne({ _id }, { $set: { photo: { data: photoData, contentType } } });
+    const _id = req.client._id;
+    const photoData = req.file.buffer;
+    const contentType = req.file.mimetype;
+
+    const result = await Employe.updateOne({ _id }, { $set: { photo: { data: photoData, contentType } } });
 
     if (result.modifiedCount > 0) {
       return res.status(200).json({ success: true, message: 'Photo mise à jour avec succès.' });
@@ -17,29 +38,8 @@ exports.uploadPhotoClient = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Aucune photo mise à jour.' });
     }
   } catch (error) {
-    console.error('Erreur lors du téléchargement de la photo :', error);
-    return res.status(500).json({ success: false, message: `Erreur lors du téléchargement de la photo : ${error.message}` });
+    console.error('Erreur lors du téléchargement de l\'image :', error);
+    res.status(500).json({ success: false, message: `Erreur lors du téléchargement de l'image : ${error.message}` });
   }
-};
+}
 
-
-
-exports.uploadPhoto = async (req, res) => {
-  try {
-    const _id = req.client._id;
-    const photoData = req.body.photoData;
-    const contentType = req.body.contentType;
-
-    // Mise à jour du champ photo dans le modèle Employe
-    const result = await employe.updateOne({ _id }, { $set: { photo: { data: photoData, contentType } } });
-
-    if (result.modifiedCount > 0) {
-      return res.status(200).json({ success: true, message: 'Photo mise à jour avec succès.' });
-    } else {
-      return res.status(404).json({ success: false, message: 'Aucune photo mise à jour.' });
-    }
-  } catch (error) {
-    console.error('Erreur lors du téléchargement de la photo :', error);
-    return res.status(500).json({ success: false, message: `Erreur lors du téléchargement de la photo : ${error.message}` });
-  }
-};
