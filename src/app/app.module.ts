@@ -23,6 +23,7 @@ import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './noauth.guard';
 import { UserService } from './services/user.service';
 import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
+import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
     AdminLayoutComponent,
     AuthLayoutComponent,
     LoginComponent,
-    LoginAdminComponent
+    LoginAdminComponent,
+    DashboardAdminComponent
   ],
   providers: [AuthService,AuthGuard,NoAuthGuard,UserService],
   bootstrap: [AppComponent]

@@ -83,7 +83,7 @@ export class LoginAdminComponent implements OnInit {
           this.isLoggedIn = true;
           // this.roles = this.tokenStorage.getUser().roles;
           // this.reloadPage();
-          window.location.href='/';
+          window.location.href='/dashboard-admin';
 
           console.log('Next level created!');
           // Redirect to home ("/") route
