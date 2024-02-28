@@ -13,7 +13,7 @@ import { AdminGuard } from 'src/app/admin.guard';
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent , canActivate: [AuthGuard,ClientGuard]},
     { path: 'dashboard-admin',component: DashboardAdminComponent , canActivate: [AuthGuard,AdminGuard]},
-    { path: 'user-profile',   component: UserProfileComponent },
+    { path: 'user-profile',   component: UserProfileComponent , canActivate: [AuthGuard]},
     { path: 'tables',         component: TablesComponent },
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent }
