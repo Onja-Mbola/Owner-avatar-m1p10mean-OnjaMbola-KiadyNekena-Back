@@ -25,19 +25,57 @@ export class ServiceService {
 
   }
   // Get all service
+  getService(id): Observable<any> {
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    return this.http.get(`${this.baseUri}/read/${id}`, { headers: headers }).pipe(
+      map((res: Response) => {
+        return res || {};
+      })
+    );
+  }
   getServices() {
-    return this.http.get(`${this.baseUri}`);
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    return this.http.get(`${this.baseUri}`, { headers: headers }).pipe(
+      map((res: Response) => {
+        return res || {};
+      })
+    );
   }
   createService(data): Observable<any> {
     const headers = {
       Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
     };
     let url = `${this.baseUri}/create`;
-    const datachange = {
-      models: 'Admin',
-      modification: { $set: data }
-    };
+    // const datachange = {
+    //   models: 'Service',
+    //   modification: { $set: data }
+    // };
     return this.http
-      .post(url, datachange, { headers: headers });
+      .post(url, data, { headers: headers });
+  }
+  updateService(id,data): Observable<any> {
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    let url = `${this.baseUri}/update/${id}`;
+    // const datachange = {
+    //   models: 'Service',
+    //   modification: { $set: data }
+    // };
+    return this.http
+      .put(url, data, { headers: headers });
+  }
+
+  deleteService(id): Observable<any> {
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    let url = `${this.baseUri}/delete/${id}`;
+    return this.http
+      .delete(url, { headers: headers });
   }
 }

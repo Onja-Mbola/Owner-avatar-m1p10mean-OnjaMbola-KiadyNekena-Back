@@ -23,16 +23,16 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-control-label" for="input-first-name">Prix du service</label>
-                  <input type="text" id="input-first-name" formControlName="price"
+                  <label class="form-control-label" for="input-first-name">Prix du service AR</label>
+                  <input type="number" id="input-first-name" formControlName="price"
                     class="form-control form-control-alternative" placeholder="Prix du service">
                     <div class="text-danger" *ngIf="submitted && myForm['price'].errors?.['required']">
                       Veuillez entrer un prix
                     </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-control-label" for="input-first-name">Duree du service</label>
-                  <input type="text" id="input-first-name" formControlName="time"
+                  <label class="form-control-label" for="input-first-name">Duree du service en minutes</label>
+                  <input type="number" id="input-first-name" formControlName="time"
                     class="form-control form-control-alternative" placeholder="Duree du service">
                     <div class="text-danger" *ngIf="submitted && myForm['time'].errors?.['required']">
                       Veuillez entrer un temps
@@ -48,9 +48,15 @@
             </div>
           </div>
           <div class="card-footer py-4">
-            <div class="col">
-              <button class="btn btn-success" type="submit"> Enregsitrer</button>
+            <div class="row">
+              <div class="col-md-3">
+                <button class="btn btn-secondary" [routerLink]="['/services-admin']"> Retour</button>
+              </div>
+              <div class="col-md-3 offset-md-6">
+                <button class="btn btn-success" type="submit"> Enregsitrer</button>
+              </div>
             </div>
+
           </div>
         </form>
       </div>

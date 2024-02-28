@@ -8,7 +8,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h3 class="card-title text-uppercase text-muted mb-0">Services</h3>
+                  <h3 class="card-title text-uppercase text-muted mb-0">Employes</h3>
                   <span class="h2 font-weight-bold mb-0 display-1">10</span>
                 </div>
                 <div class="col-auto">
@@ -26,8 +26,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h3 class="card-title text-uppercase text-muted mb-4 ">Services</h3>
-                  <button class="btn btn-success mt-3" [routerLink]="['/services-admin/create']"> <i class="fa fa-plus"></i> Nouveau</button>
+                  <h3 class="card-title text-uppercase text-muted mb-4 ">Employes</h3>
+                  <button class="btn btn-success mt-3" [routerLink]="['/employe-admin/create']"> <i class="fa fa-plus"></i> Nouveau</button>
                 </div>
               </div>
             </div>
@@ -45,12 +45,9 @@
     <div class="col">
       <div class="card shadow">
         <div class="card-header border-0">
-          <h3 class="mb-0">Les Services</h3>
+          <h3 class="mb-0">Les Employes</h3>
         </div>
-        <div class="loader-container" *ngIf="loading">
-          <div class="loader"></div>
-        </div>
-        <div  *ngIf="!loading"class="table-responsive">
+        <div  class="table-responsive">
           <table  class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
@@ -62,7 +59,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let service of Services; let i = index">
+              <tr >
                 <th scope="row">
                   <div class="media align-items-center">
                     <a href="javascript:void(0)" class="avatar rounded-circle mr-3">
@@ -71,23 +68,23 @@
                   </div>
                 </th>
                 <td>
-                 {{ service.name }}
+                 name
                 </td>
                 <td>
 
-                  {{ service.price }} AR
+                  price
                 </td>
                 <td>
-                  {{ service.time }} MN
+                  time
                 </td>
                 <td>
 
                   <div class="d-flex align-items-center">
                     <div class="col">
-                      <span class="edit" [routerLink]="['/services-admin/edit/', service._id]">
+                      <span class="edit" >
                         <button type="button" class="btn btn-success btn-sm"><i class="fa fa-pen"></i>Modifier</button>
                       </span>
-                      <span class="delete" (click)="removeService(service, i)">
+                      <span class="delete" >
                         <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>Supprimer</button>
                       </span>
                     </div>

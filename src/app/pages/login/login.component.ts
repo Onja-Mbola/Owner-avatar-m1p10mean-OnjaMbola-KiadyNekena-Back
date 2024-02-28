@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
+  loading: boolean = false;
+
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
@@ -68,6 +70,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.loading = true;
     if (!this.loginForm.valid) {
       console.log('Le formulaire n\'est pas valide. État des contrôles :', this.loginForm);
       return false;
@@ -81,9 +84,11 @@ export class LoginComponent implements OnInit {
 
           this.isLoginFailed = false;
           this.isLoggedIn = true;
+
           // this.roles = this.tokenStorage.getUser().roles;
           // this.reloadPage();
           window.location.href='/';
+          this.loading = false;
 
           console.log('Next level created!');
           // Redirect to home ("/") route
@@ -95,6 +100,7 @@ export class LoginComponent implements OnInit {
         error: (e) => {
           this.errorMessage = e.message;
           this.isLoginFailed = true;
+          this.loading =false;
           console.error(e);
           // alert('erreur'+e.error.message);
           this.showDanger(e.error.message);

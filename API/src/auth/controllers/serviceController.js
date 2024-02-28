@@ -14,6 +14,19 @@ exports.getServices = async (req, res) => {
     next(error);
   }
 };
+exports.getServiceById = async (req, res,next) => {
+  try {
+    const data = await Service.findById(req.params.id).exec();
+
+    if (!data) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
 exports.createService = async (req, res) => {
   // try {
   //   const data = await Service.create(req.body);
@@ -31,6 +44,43 @@ exports.createService = async (req, res) => {
   }
 };
 
+exports.updateService = async (req, res, next) => {
+  try {
+    const updatedData = req.body;
+
+    // Log the update data for debugging
+    console.log('Update Data:', updatedData);
+
+    const data = await Service.findByIdAndUpdate(req.params.id, { $set: updatedData }, { new: true }).exec();
+
+    if (!data) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    // Log the updated document for debugging
+    console.log('Updated Document:', data);
+
+    res.json(data);
+  } catch (error) {
+    console.error('Update Error:', error);
+    next(error);
+  }
+};
+exports.deleteService = async (req, res, next) => {
+  try {
+    const data = await Service.findOneAndDelete({ _id: req.params.id }).exec();
+
+    if (!data) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    res.status(200).json({
+      msg: data
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 // exports.createService = async (req, res, next) => {
 //   try {
 //     const newService = await Service.create(req.body);

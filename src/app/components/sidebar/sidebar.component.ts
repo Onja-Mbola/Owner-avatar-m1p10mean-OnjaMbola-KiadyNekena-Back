@@ -15,6 +15,7 @@ export const ROUTES: RouteInfo[] = [
 export const AROUTES: RouteInfo[] = [
   { path: '/dashboard-admin', title: 'Tableau de bord',  icon: 'ni-tv-2 text-primary', class: '' },
   { path: '/services-admin', title: 'Service',  icon: 'ni-tv-2 text-primary', class: '' },
+  { path: '/employe-admin', title: 'Employe',  icon: 'fa fa-user text-primary', class: '' },
 ];
 export const EROUTES: RouteInfo[] = [
   { path: '/dashboard-admin', title: 'Tableau de bord',  icon: 'ni-tv-2 text-primary', class: '' },

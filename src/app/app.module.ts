@@ -28,6 +28,9 @@ import { ServicesCreateComponent } from './pages/admin-services/services-create/
 import { ServicesEditComponent } from './pages/admin-services/services-edit/services-edit.component';
 import { CommonModule } from '@angular/common';
 import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
+import { EmployeListComponent } from './pages/admin-employe/employe-list/employe-list.component';
+import { EmployeCreateComponent } from './pages/admin-employe/employe-create/employe-create.component';
+import { EmployeEditComponent } from './pages/admin-employe/employe-edit/employe-edit.component';
 
 
 @NgModule({
@@ -52,7 +55,10 @@ import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
     DashboardAdminComponent,
     ServicesListComponent,
     ServicesCreateComponent,
-    ServicesEditComponent
+    ServicesEditComponent,
+    EmployeListComponent,
+    EmployeCreateComponent,
+    EmployeEditComponent
   ],
   providers: [AuthService,AuthGuard,NoAuthGuard,UserService],
   bootstrap: [AppComponent]

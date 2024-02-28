@@ -49,22 +49,49 @@ export class ServicesCreateComponent implements OnInit {
 	showDanger(dangerTpl) {
 		this.toastService.show(dangerTpl, { classname: 'alert-danger text-light  m-3 p-3', delay: 15000 });
 	}
+  // onSubmit() {
+  //   this.submitted = true;
+  //   if (!this.serviceForm.valid) {
+  //     return false;
+  //   } else {
+  //     return this.serviceService.createService(this.serviceForm.value).subscribe({
+  //       complete: () => {
+  //         console.log('Service successfully created!'),
+  //           this.ngZone.run(() => this.router.navigateByUrl('/services-admin'));
+  //           this.showSuccess("Service cree");
+  //       },
+  //       error: (e) => {
+  //         console.log(e);
+  //         this.showDanger(e.error.message);
+  //       },
+  //     });
+  //   }
+  // }
   onSubmit() {
     this.submitted = true;
+
     if (!this.serviceForm.valid) {
       return false;
     } else {
-      return this.serviceService.createService(this.serviceForm.value).subscribe({
-        complete: () => {
-          console.log('Service successfully created!'),
-            this.ngZone.run(() => this.router.navigateByUrl('/services-list'));
-            this.showSuccess("Service cree");
-        },
-        error: (e) => {
-          console.log(e);
-          this.showDanger(e.error.message);
-        },
-      });
+      const formData = { ...this.serviceForm.value };
+        return this.serviceService.createService(formData).subscribe({
+          complete: () => {
+            console.log('Next level created!'),
+            // Redirect to home ("/") route
+              this.ngZone.run(() => {
+                  // window.location.reload();
+                  this.router.navigateByUrl('/services-admin')
+
+                  // Display an alert after redirection
+                  // alert('Verify your email.'); // You might want to use a more user-friendly notification method
+                  this.showSuccess("Service cree");
+              });
+          },
+          error: (e) => {
+            console.log(e);
+            this.showDanger(e.error.message);
+          },
+        });
     }
   }
 }

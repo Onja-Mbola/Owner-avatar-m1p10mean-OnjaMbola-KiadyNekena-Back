@@ -1,1 +1,66 @@
-<p>services-edit works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Modification Services</h3>
+        </div>
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-first-name">Nom du service</label>
+                  <input type="text" id="input-first-name" formControlName="name"
+                    class="form-control form-control-alternative" placeholder="Nom du service">
+                  <div class="text-danger" *ngIf="submitted && myForm['name'].errors?.['required']">
+                    Veuillez entrer un nom
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-control-label" for="input-first-name">Prix du service AR</label>
+                  <input type="number" id="input-first-name" formControlName="price"
+                    class="form-control form-control-alternative" placeholder="Prix du service">
+                    <div class="text-danger" *ngIf="submitted && myForm['price'].errors?.['required']">
+                      Veuillez entrer un prix
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" for="input-first-name">Duree du service en minutes</label>
+                  <input type="number" id="input-first-name" formControlName="time"
+                    class="form-control form-control-alternative" placeholder="Duree du service">
+                    <div class="text-danger" *ngIf="submitted && myForm['time'].errors?.['required']">
+                      Veuillez entrer un temps
+                    </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-first-name">Image du service</label>
+                  <input type="file" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer py-4">
+            <div class="row">
+              <div class="col-md-3">
+                <button class="btn btn-secondary" [routerLink]="['/services-admin']"> Retour</button>
+              </div>
+              <div class="col-md-3 offset-md-6">
+                <button class="btn btn-success" type="submit"> Enregsitrer</button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
