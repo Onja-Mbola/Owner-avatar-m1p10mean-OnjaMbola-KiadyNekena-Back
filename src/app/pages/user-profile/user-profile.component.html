@@ -18,16 +18,18 @@
       <div class="card card-profile shadow">
         <div class="row justify-content-center">
           <div class="col-lg-3 order-lg-2">
-            <div class="card-profile-image">
+            <div class="card-profile-image card-profile-image-container">
               <a href="javascript:void(0)">
+                <input type="file" id="profile-picture-input" style="display: none" (change)="onFileSelected($event)">
                 <img src="assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
+                <i class="fas fa-pencil-alt edit-icon"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
           <div class="d-flex justify-content-between">
-            <a href="javascript:void(0)" class="btn btn-sm btn-info mr-4">Rendez-vous</a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-info mr-4">ddssRendez-vous</a>
 
           </div>
         </div>
@@ -127,6 +129,29 @@
                 </div>
               </div>
             </div>
+
+            <input type="file" class="file-input" (change)="onChange($event)" #fileUpload />
+
+          <div *ngIf="file">
+            <section class="file-info">
+              File details:
+              <ul>
+                <li>Name: {{file.name}}</li>
+                <li>Type: {{file.type}}</li>
+                <li>Size: {{file.size}} bytes</li>
+              </ul>
+            </section>
+
+            <button (click)="onUpload()">Upload the file</button>
+
+            <section [ngSwitch]="status">
+              <p *ngSwitchCase="'uploading'">⏳ Uploading...</p>
+              <p *ngSwitchCase="'success'">✅ Done!</p>
+              <p *ngSwitchCase="'fail'">❌ Error!</p>
+              <p *ngSwitchDefault>😶 Waiting to upload...</p>
+            </section>
+          </div>
+
         </div>
       </form>
       </div>
