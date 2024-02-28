@@ -34,7 +34,7 @@ app.use(cors());
 // Routes authentification
 app.use('/api/auth', authRoutes);
 // Routes Service
-app.use('/api/service/', serviceRoutes);
+app.use('/api/services-admin/', serviceRoutes);
 
 // Host
 // app.listen(port, '192.168.88.18', () => {

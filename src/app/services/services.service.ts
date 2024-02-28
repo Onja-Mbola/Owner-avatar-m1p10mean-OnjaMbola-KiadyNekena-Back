@@ -16,7 +16,7 @@ const httpOptions = {
 
 
 export class ServiceService {
-  baseUri: string = 'http://localhost:3000/api/service';
+  baseUri: string = 'http://localhost:3000/api/services-admin';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   constructor(
     private http: HttpClient,
@@ -32,12 +32,12 @@ export class ServiceService {
     const headers = {
       Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
     };
-    let url = `${this.baseUri}/service/create`;
+    let url = `${this.baseUri}/create`;
     const datachange = {
       models: 'Admin',
       modification: { $set: data }
     };
     return this.http
-      .put(url, datachange, { headers: headers });
+      .post(url, datachange, { headers: headers });
   }
 }

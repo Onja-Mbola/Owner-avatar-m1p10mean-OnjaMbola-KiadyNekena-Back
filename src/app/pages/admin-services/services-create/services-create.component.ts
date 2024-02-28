@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/services/services.service';
+import { ToastService } from 'src/app/toast/toast.service';
 
 @Component({
   selector: 'app-services-create',
@@ -17,7 +18,9 @@ export class ServicesCreateComponent implements OnInit {
     public fb: FormBuilder,
     private router: Router,
     private ngZone: NgZone,
-    private serviceService: ServiceService
+    private serviceService: ServiceService,
+    public toastService: ToastService,
+
   ) {
     this.mainForm();
   }
@@ -39,6 +42,13 @@ export class ServicesCreateComponent implements OnInit {
   get myForm() {
     return this.serviceForm.controls;
   }
+  showSuccess(text) {
+		this.toastService.show(text, { classname: 'bg-success text-light m-3 p-3 ', delay: 10000 });
+	}
+
+	showDanger(dangerTpl) {
+		this.toastService.show(dangerTpl, { classname: 'alert-danger text-light  m-3 p-3', delay: 15000 });
+	}
   onSubmit() {
     this.submitted = true;
     if (!this.serviceForm.valid) {
@@ -46,11 +56,13 @@ export class ServicesCreateComponent implements OnInit {
     } else {
       return this.serviceService.createService(this.serviceForm.value).subscribe({
         complete: () => {
-          console.log('Employee successfully created!'),
-            this.ngZone.run(() => this.router.navigateByUrl('/employees-list'));
+          console.log('Service successfully created!'),
+            this.ngZone.run(() => this.router.navigateByUrl('/services-list'));
+            this.showSuccess("Service cree");
         },
         error: (e) => {
           console.log(e);
+          this.showDanger(e.error.message);
         },
       });
     }
