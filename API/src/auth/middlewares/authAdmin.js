@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const configJwt = require("../config/configJwt");
-const Client = require("../models/userModel");
+const Employe = require("../models/employeModel");
 const mongoose = require('mongoose');
 
 const authenticateToken = async (req, res, next) => {
@@ -17,10 +17,10 @@ const authenticateToken = async (req, res, next) => {
     const _id = decoded._id;
 
     // Rechercher directement par _id
-    const client = await Client.findOne({ _id });
+    const client = await Employe.findOne({ _id });
 
     if (!client) {
-      return res.status(404).json({ success: false, message: "Client non trouvé." });
+      return res.status(404).json({ success: false, message: "Employe non trouvé." });
     }
 
     // Ajouter les informations du client à la requête pour une utilisation ultérieure

@@ -54,6 +54,16 @@ export class UserProfileComponent implements OnInit {
           phoneNumber: ['', [Validators.required, phoneNumberValidator]],
     });
   }
+
+  //modification photo de profil
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+
+    // Traitez le fichier comme vous le souhaitez, par exemple, téléchargez-le sur le serveur, etc.
+    console.log('Fichier sélectionné:', file);
+  }
+
+
   updateProfile() {
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -105,6 +115,9 @@ export class UserProfileComponent implements OnInit {
       console.log('Le formulaire n\'est pas valide. État des contrôles :', this.profileForm);
       return false;
     } else {
+
+
+
       const formData = { ...this.profileForm.value };
 
       return this.userService.updateProfile(formData).subscribe({
