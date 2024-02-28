@@ -21,8 +21,7 @@
             <div class="card-profile-image card-profile-image-container">
               <a href="javascript:void(0)">
                 <input type="file" id="profile-picture-input" style="display: none" (change)="onFileSelected($event)">
-                <img src="assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
-                <i class="fas fa-pencil-alt edit-icon"></i>
+                <img [src]="imageSource" class="rounded-circle">
               </a>
             </div>
           </div>
@@ -129,31 +128,29 @@
                 </div>
               </div>
             </div>
-
-            <!-- <input type="file" class="file-input" (change)="onChange($event)" #fileUpload />
-
-          <div *ngIf="file">
-            <section class="file-info">
-              File details:
-              <ul>
-                <li>Name: {{file.name}}</li>
-                <li>Type: {{file.type}}</li>
-                <li>Size: {{file.size}} bytes</li>
-              </ul>
-            </section>
-
-            <button (click)="onUpload()">Upload the file</button>
-
-            <section [ngSwitch]="status">
-              <p *ngSwitchCase="'uploading'">⏳ Uploading...</p>
-              <p *ngSwitchCase="'success'">✅ Done!</p>
-              <p *ngSwitchCase="'fail'">❌ Error!</p>
-              <p *ngSwitchDefault>😶 Waiting to upload...</p>
-            </section>
-          </div> -->
-
         </div>
       </form>
+      <input type="file" class="file-input" name="file" (change)="onChange($event)" #fileUpload />
+
+      <div *ngIf="file">
+        <section class="file-info">
+          File details:
+          <ul>
+            <li>Name: {{file.name}}</li>
+            <li>Type: {{file.type}}</li>
+            <li>Size: {{file.size}} bytes</li>
+          </ul>
+        </section>
+
+        <button (click)="onUpload()">Upload the file</button>
+
+        <section [ngSwitch]="status">
+          <p *ngSwitchCase="'uploading'">⏳ Uploading...</p>
+          <p *ngSwitchCase="'success'">✅ Done!</p>
+          <p *ngSwitchCase="'fail'">❌ Error!</p>
+          <p *ngSwitchDefault>😶 Waiting to upload...</p>
+        </section>
+      </div>
       </div>
     </div>
   </div>

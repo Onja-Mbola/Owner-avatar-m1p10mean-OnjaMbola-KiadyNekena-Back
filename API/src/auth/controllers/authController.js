@@ -289,7 +289,7 @@ exports.loginClient = async (req, res) => {
 
 
     const token = jwt.sign({ _id }, configJwt.secret);
-    res.status(200).json({ success: true, client_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email, token });
+    res.status(200).json({ success: true, client_id: user.id, userName: user.firstName + " " + user.lastName, email: user.email , photo: infoClient.photo, token });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ success: false, message: 'Internal server error.' });

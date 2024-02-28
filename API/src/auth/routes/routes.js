@@ -37,7 +37,11 @@ router.put("/modifInfoClient", authJwt, authController.modifGeneral);
 router.put("/modifInfoClientById", authAdmin, authController.modifGeneralById);
 
 // Route pour modifier photo
-router.put('/uploadPhotoClient', authJwt, globalController.upload.single('image'), globalController.uploadImage);
+router.put('/uploadPhotoClient', authJwt, globalController.upload.single('image'), globalController.uploadImageClient);
+
+//Route pour avoir image Client
+router.get('/getPhotoClient/:id', authJwt, globalController.getImageClient);
+
 
 
 
@@ -64,7 +68,7 @@ router.get("/getInfoEmploye", authAdmin, employeController.getInfoEmploye);
 
 
 // Route pour avoir l'information Employe by Id
-router.get("/getInfoEmploye", authAdmin, employeController.getInfoEmployebyId);
+router.get("/getInfoEmployeId", authAdmin, employeController.getInfoEmployebyId);
 
 
 // Route pour modifier l'information Employe
@@ -72,9 +76,10 @@ router.put("/modifInfoEmploye", authAdmin, employeController.modifGeneral);
 
 
 // Route pour modifier l'image Employe
-router.put('/uploadPhotoEmploye', authAdmin, globalController.upload.single('image'), globalController.uploadImage);
+router.put('/uploadPhotoEmploye', authAdmin, globalController.upload.single('file'), globalController.uploadImage);
 
-
+//Route pour avoir image Employe
+router.get('/getPhoto/:id',authAdmin, globalController.getImage);
 
 
 

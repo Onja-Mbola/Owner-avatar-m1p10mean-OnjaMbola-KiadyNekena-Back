@@ -284,7 +284,7 @@ exports.getInfoEmploye = async (req, res) => {
     if (!infoClient) {
       return res.status(401).json({ success: false, message: 'Utilisateur inexistant.' });
     }
-    res.status(200).json({ success: true, _id : infoClient._id, firstName : infoClient.firstName, lastName : infoClient.lastName, email : infoClient.email, sexe : infoClient.sexe, address : infoClient.address, phoneNumber : infoClient.phoneNumber, salaire: infoClient.salaire});
+    res.status(200).json({ success: true, _id : infoClient._id, firstName : infoClient.firstName, lastName : infoClient.lastName, email : infoClient.email, sexe : infoClient.sexe, address : infoClient.address, phoneNumber : infoClient.phoneNumber, photo: infoClient.photo, salaire: infoClient.salaire});
   } catch (erreur) {
     console.log(erreur);
     res.status(500).json({ success: false, message: 'Erreur lors de la récupération de vos informations.' });
