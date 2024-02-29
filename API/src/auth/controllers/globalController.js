@@ -77,7 +77,6 @@ exports.getImage = async (req, res) => {
     if (!employe) {
       return res.status(404).json({ success: false, message: 'Employé non trouvé.' });
     }
-    console.log(employe);
     res.set('Content-Type', employe.photo.contentType);
     res.send(employe.photo.data);
   } catch (error) {

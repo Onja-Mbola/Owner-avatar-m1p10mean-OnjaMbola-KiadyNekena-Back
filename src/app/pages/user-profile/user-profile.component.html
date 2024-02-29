@@ -21,14 +21,17 @@
             <div class="card-profile-image card-profile-image-container">
               <a href="javascript:void(0)">
                 <input type="file" id="profile-picture-input" style="display: none" (change)="onFileSelected($event)">
-                <img [src]="imageSource" class="rounded-circle">
+                <img [src]="imageSource" class="rounded-circle" style="
+                object-fit: cover;
+                height: 10em;
+                width: 10em;
+            ">
               </a>
             </div>
           </div>
         </div>
         <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
           <div class="d-flex justify-content-between">
-            <a href="javascript:void(0)" class="btn btn-sm btn-info mr-4">ddssRendez-vous</a>
 
           </div>
         </div>

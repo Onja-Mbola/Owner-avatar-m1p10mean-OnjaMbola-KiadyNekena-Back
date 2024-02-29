@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import {
   HttpClient,
   HttpHeaders,
@@ -48,6 +48,40 @@ export class UserService {
       }
 
   }
+
+  loadImage(): Observable<string> {
+    let imageUrl;
+
+    if (!this.token.getUser().role) {
+      imageUrl = `${this.baseUri}/getPhotoClient/${this.token.getUser().client_id}`;
+    } else {
+      imageUrl = `${this.baseUri}/getPhoto/${this.token.getUser().employe_id}`;
+    }
+
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(),
+    };
+
+    return this.http.get(imageUrl, { responseType: 'blob', headers }).pipe(
+      switchMap((data) => {
+        return new Observable<string>((observer) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const imageSource = reader.result as string;
+            observer.next(imageSource);
+            observer.complete();
+          };
+          reader.readAsDataURL(data);
+        });
+      }),
+      catchError((error) => {
+        console.error('Erreur lors du chargement de l\'image :', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+
   updateProfile(data): Observable<any> {
     if(!this.token.getUser().role){
       const headers = {
