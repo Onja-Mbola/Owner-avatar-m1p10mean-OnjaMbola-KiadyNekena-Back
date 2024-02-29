@@ -14,7 +14,8 @@ let Service = new Schema({
      type: Number
   },
   image: {
-     type: String
+    data: Buffer,
+    contentType: String,
   }
 }, {
   collection: 'services'

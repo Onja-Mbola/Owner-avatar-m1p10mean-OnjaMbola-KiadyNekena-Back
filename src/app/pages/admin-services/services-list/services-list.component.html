@@ -66,7 +66,11 @@
                 <th scope="row">
                   <div class="media align-items-center">
                     <a href="javascript:void(0)" class="avatar rounded-circle mr-3">
-                      <img alt="Image placeholder" src="../assets/img/theme/bootstrap.jpg">
+                      <img alt="Image placeholder" [src]="displayImage(service.image)" alt="{{ service.name }} Image" style="
+                      object-fit: cover;
+                      height: 3em;
+                      width: 3em;
+                  ">
                     </a>
                   </div>
                 </th>

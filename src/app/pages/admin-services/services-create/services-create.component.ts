@@ -1,7 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 import { ServiceService } from 'src/app/services/services.service';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { ToastService } from 'src/app/toast/toast.service';
 
 @Component({
@@ -20,6 +23,10 @@ export class ServicesCreateComponent implements OnInit {
     private ngZone: NgZone,
     private serviceService: ServiceService,
     public toastService: ToastService,
+    private token: TokenStorageService,
+    private http: HttpClient,
+
+
 
   ) {
     this.mainForm();
@@ -30,6 +37,7 @@ export class ServicesCreateComponent implements OnInit {
       name: ['', [Validators.required]],
       price: ['', [Validators.required]],
       time: ['', [Validators.required, ]],
+      image: [null, [Validators.required]]
     });
   }
   // Choose designation with select dropdown
@@ -38,6 +46,22 @@ export class ServicesCreateComponent implements OnInit {
       onlySelf: true,
     });
   }
+
+  status: "initial" | "uploading" | "success" | "fail" = "initial"; // Variable to store file status
+  file: File | null = null;
+
+  onFileChange(event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (file) {
+      this.file = file;  // Stockez la référence du fichier dans votre composant
+      this.serviceForm.get('image').setValue(file.name);  // Affichez le nom du fichier dans le formulaire si nécessaire
+      this.serviceForm.get('image').updateValueAndValidity();
+    }
+  }
+
+
+
   // Getter to access form control
   get myForm() {
     return this.serviceForm.controls;
@@ -67,13 +91,26 @@ export class ServicesCreateComponent implements OnInit {
   //     });
   //   }
   // }
+
+
+
+
+
   onSubmit() {
     this.submitted = true;
 
     if (!this.serviceForm.valid) {
       return false;
     } else {
-      const formData = { ...this.serviceForm.value };
+
+      let formData = new FormData();
+      formData.append('name', this.serviceForm.get('name').value);
+      formData.append('price', this.serviceForm.get('price').value);
+      formData.append('time', this.serviceForm.get('time').value);
+
+      if (this.file) {
+        formData.append('file', this.file, this.file.name);
+      }
         return this.serviceService.createService(formData).subscribe({
           complete: () => {
             console.log('Next level created!'),

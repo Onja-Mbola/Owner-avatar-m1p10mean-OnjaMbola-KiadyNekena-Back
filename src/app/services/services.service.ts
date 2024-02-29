@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import {
   HttpClient,
   HttpHeaders,
@@ -46,6 +46,8 @@ export class ServiceService {
       })
     );
   }
+
+
   createService(data): Observable<any> {
     const headers = {
       Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token

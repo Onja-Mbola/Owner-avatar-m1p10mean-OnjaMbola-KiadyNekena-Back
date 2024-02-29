@@ -341,6 +341,19 @@ exports.getListeClient = async (req, res) => {
 };
 
 
+// Fonction pour récupérer la liste des utilisateurs
+exports.getListeEmploye = async (req, res) => {
+  try {
+
+      const utilisateurs = await Employe.find();
+      return res.status(200).json({ success: true, utilisateurs });
+  } catch (erreur) {
+    res.status(500).json({ success: false, message: 'Erreur lors de la récupération des utilisateurs.' });
+  }
+};
+
+
+
 //Fonction qui affiche les information du client
 exports.getInfoClient = async (req, res) => {
   try {
