@@ -21,7 +21,6 @@ export class UserProfileComponent implements OnInit {
 
     submitted = false;
     profileForm: FormGroup;
-    imageUrl: string;
     imageSource: string;
 
     test : Date = new Date();
@@ -45,25 +44,8 @@ export class UserProfileComponent implements OnInit {
     ) {}
 
    ngOnInit() {
+    this.loadImage();
     this.currentUser = this.token.getUser();
-    this.imageUrl = `http://localhost:3000/api/auth/getPhoto/${this.token.getUser().employe_id}`;
-    const headers = {
-      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
-    };
-    this.http.get(this.imageUrl, { responseType: 'blob', headers })
-    .subscribe(
-      (data) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          this.imageSource = reader.result as string;
-        };
-        reader.readAsDataURL(data);
-      },
-      (error) => {
-        console.error('Erreur lors du chargement de l\'image :', error);
-      }
-    );
-    console.log(this.imageUrl);
     this.updateProfile();
     this.getMyProfile();
     this.profileForm = this.fb.group({
@@ -88,9 +70,19 @@ export class UserProfileComponent implements OnInit {
     const file = event.target.files[0];
 
     // Traitez le fichier comme vous le souhaitez, par exemple, téléchargez-le sur le serveur, etc.
-    console.log('Fichier sélectionné:', file);
   }
 
+
+  loadImage(): void {
+    this.userService.loadImage().subscribe(
+      (imageSource) => {
+        this.imageSource = imageSource;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement de l\'image dans le composant :', error);
+      }
+    );
+  }
 
   updateProfile() {
     this.profileForm = this.fb.group({
@@ -185,19 +177,21 @@ export class UserProfileComponent implements OnInit {
   onUpload() {
     if (this.file) {
       const formData = new FormData();
+      let upload$;
 
       const headers = {
         Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
       };
 
       formData.append('file', this.file, this.file.name);
+      if(!this.token.getUser().role){
+         upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoClient", formData, { headers });
+      } else{
+         upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoEmploye", formData, { headers });
+      }
 
-
-      const upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoEmploye", formData, { headers });
 
       this.status = 'uploading';
-
-      console.log(this.file.arrayBuffer);
 
       upload$.subscribe({
         next: () => {

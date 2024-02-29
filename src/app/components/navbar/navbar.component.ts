@@ -3,6 +3,8 @@ import { ROUTES } from '../sidebar/sidebar.component';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { UserService } from 'src/app/services/user.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -10,17 +12,19 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  imageSource: string;
   public focus;
   public listTitles: any[];
   public location: Location;
   currentUser: any;
-  constructor(location: Location,  private element: ElementRef, private router: Router,private token: TokenStorageService ) {
+  constructor(location: Location,  private element: ElementRef, private router: Router,private token: TokenStorageService,     private userService: UserService    ) {
     this.location = location;
   }
 
   ngOnInit() {
     this.currentUser = this.token.getUser();
     this.listTitles = ROUTES.filter(listTitle => listTitle);
+    this.loadImage();
   }
   getTitle(){
     var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -35,6 +39,18 @@ export class NavbarComponent implements OnInit {
     }
     return 'Dashboard';
   }
+
+  loadImage(): void {
+    this.userService.loadImage().subscribe(
+      (imageSource) => {
+        this.imageSource = imageSource;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement de l\'image dans le composant :', error);
+      }
+    );
+  }
+
   logout(): void {
     this.token.signOut();
     // window.location.reload();
