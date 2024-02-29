@@ -1,10 +1,34 @@
 const Service = require('../models/serviceModel');
+const multer = require('multer');
+
+
+const filtreImage = (req, file, cb) => {
+  const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (allowedFormats.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Format de fichier non pris en charge. Veuillez télécharger une image JPEG ou JPG.'), false);
+  }
+};
+
+
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  fileFilter: filtreImage,
+});
+
+
+exports.upload = upload;
+
+
 
 // Fonction pour l'inscription
 exports.getServices = async (req, res) => {
   try{
     // const data = await Service.find().exec();
     // res.json({ success: true, data: data });
+
     Service.find()
     .exec()
     .then((data) => {
@@ -27,6 +51,23 @@ exports.getServiceById = async (req, res,next) => {
     next(error);
   }
 };
+
+exports.getImageService = async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({ success: false, message: 'Service non trouvé.' });
+    }
+
+    res.set('Content-Type', service.image.contentType);
+    res.send(service.image.data);
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'image :', error);
+    res.status(500).json({ success: false, message: `Erreur lors de la récupération de l'image : ${error.message}` });
+  }
+}
+
 exports.createService = async (req, res) => {
   // try {
   //   const data = await Service.create(req.body);
@@ -34,13 +75,23 @@ exports.createService = async (req, res) => {
   // } catch (error) {
   //   return next(error);
   // }
+
+  if (!req.body && req.client.role !== "admin" ) {
+    return res.status(403).json({ success: false, message: 'Acces interdit' });
+  }
+
   try{
     const {name,price,time,image } = req.body;
-    const newService = new Service({ name, description ,price , time , image });
+    const _id = req.client._id;
+    const photoData = req.file.buffer;
+    const contentType = req.file.mimetype;
+
+
+    const newService = new Service({ name, price , time , image : { data: photoData, contentType } });
     await newService.save();
     res.json({ success: true, message: req.body });
   }catch(error){
-    next(error);
+    return res.status(400).json({ success: false, message: error.message });;
   }
 };
 

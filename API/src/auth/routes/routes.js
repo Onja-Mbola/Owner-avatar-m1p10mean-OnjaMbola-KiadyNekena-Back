@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('../controllers/authController');
 const employeController = require('../controllers/employeControler');
 const globalController = require('../controllers/globalController');
+const rendezVousController = require('../controllers/rendezVousController');
 const authJwt = require('../middlewares/authJwt');
 const authAdmin = require('../middlewares/authAdmin');
 
@@ -44,6 +45,22 @@ router.get('/getPhotoClient/:id', authJwt, globalController.getImageClient);
 
 // Route pour avoir la liste des employe
 router.get("/getListeEmploye", authJwt, authController.getListeEmploye);
+
+// Route pour avoir la liste des employe
+router.get("/getListeEmploye", authJwt, authController.getListeEmploye);
+
+
+// Route pour creez un rendez vous
+router.post("/createRendezVous", authJwt, rendezVousController.registerRendezVous);
+
+// Route pour avoir la liste des rendez vous par Id
+router.get("/getRendezVous/:id", authAdmin, rendezVousController.getListeRendezVousById);
+
+// Route pour avoir la liste des rendez vous
+router.get("/getRendezVous", authJwt, rendezVousController.getListeRendezVous);
+
+
+
 
 
 

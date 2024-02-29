@@ -68,6 +68,12 @@ const employeSchema = new mongoose.Schema({
     required: true,
     message: 'Role invalide',
   },
+  heureEntre : {
+    type : Number,
+  },
+  heureSortie : {
+    type : Number,
+  },
   codeValidation: String,
   isVerified: {
     type: Boolean,

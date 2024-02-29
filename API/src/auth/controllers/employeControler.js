@@ -275,12 +275,12 @@ exports.loginEmploye = async (req, res) => {
 // Fonction pour récupérer la liste des utilisateurs
 exports.getListeEmploye = async (req, res) => {
   try {
-      if( req.client.role == "admin") {
-        const utilisateurs = await Employe.find();
+        const utilisateurs = await Employe.find(
+          {
+            role : "employe",
+          }
+        );
         return res.status(200).json({ success: true, utilisateurs });
-      } else {
-        return res.status(403).json({ success : false , message: 'Acces interdit, vous n avez pas acces a ce ressource'});
-      }
     } catch (erreur) {
     res.status(500).json({ success: false, message: 'Erreur lors de la récupération des utilisateurs.' });
   }
