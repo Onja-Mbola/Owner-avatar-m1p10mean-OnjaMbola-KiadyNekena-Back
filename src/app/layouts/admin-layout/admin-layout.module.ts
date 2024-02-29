@@ -13,6 +13,7 @@ import { UserProfileComponent } from '../../pages/user-profile/user-profile.comp
 import { TablesComponent } from '../../pages/tables/tables.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CartListComponent } from 'src/app/pages/cart-list/cart-list.component';
 
 
 // import { ToastrModule } from 'ngx-toastr';
@@ -33,7 +34,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     UserProfileComponent,
     TablesComponent,
     IconsComponent,
-    MapsComponent
+    MapsComponent,
+    CartListComponent
   ]
 })
 

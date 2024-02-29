@@ -42,8 +42,8 @@ router.put('/uploadPhotoClient', authJwt, globalController.upload.single('file')
 //Route pour avoir image Client
 router.get('/getPhotoClient/:id', authJwt, globalController.getImageClient);
 
-
-
+// Route pour avoir la liste des employe
+router.get("/getListeEmploye", authJwt, authController.getListeEmploye);
 
 
 

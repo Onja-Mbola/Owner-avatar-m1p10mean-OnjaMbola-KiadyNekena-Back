@@ -49,6 +49,17 @@ export class UserService {
 
   }
 
+  getEmploye() {
+    const headers = {
+      Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+    };
+    return this.http.get(`${this.baseUri}/getListeEmploye`, { headers: headers }).pipe(
+      map((res: Response) => {
+        return res || {};
+      })
+    );
+  }
+
   loadImage(): Observable<string> {
     let imageUrl;
 
@@ -106,8 +117,19 @@ export class UserService {
       return this.http
         .put(url, datachange, { headers: headers });
     }
+  }
 
-
+  createRDV(data): Observable<any> {
+      const headers = {
+        Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
+      };
+      let url = `${this.baseUri}/createRendezVous`;
+      const datachange = {
+        models: 'Employe',
+        modification: { $set: data }
+      };
+      return this.http
+        .put(url, datachange, { headers: headers });
   }
 
 
