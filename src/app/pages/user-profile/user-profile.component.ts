@@ -185,9 +185,9 @@ export class UserProfileComponent implements OnInit {
 
       formData.append('file', this.file, this.file.name);
       if(!this.token.getUser().role){
-         upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoClient", formData, { headers });
+         upload$ = this.http.put("https://m1p10mean-onjambola-kiadynekena-back-2.onrender.com/api/auth/uploadPhotoClient", formData, { headers });
       } else{
-         upload$ = this.http.put("http://localhost:3000/api/auth/uploadPhotoEmploye", formData, { headers });
+         upload$ = this.http.put("https://m1p10mean-onjambola-kiadynekena-back-2.onrender.com/api/auth/uploadPhotoEmploye", formData, { headers });
       }
 
 
