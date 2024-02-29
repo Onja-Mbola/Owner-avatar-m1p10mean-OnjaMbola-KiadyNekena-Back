@@ -16,7 +16,7 @@ const httpOptions = {
 
 
 export class ServiceService {
-  baseUri: string = 'http://localhost:3000/api/services-admin';
+  baseUri: string = 'http://localhost:3000/api/services';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   constructor(
     private http: HttpClient,
@@ -29,7 +29,7 @@ export class ServiceService {
     const headers = {
       Authorization: 'Bearer ' + this.token.getToken(), // Replace yourAccessToken with the actual token
     };
-    return this.http.get(`${this.baseUri}/read/${id}`, { headers: headers }).pipe(
+    return this.http.get(`${this.baseUri}/${id}`, { headers: headers }).pipe(
       map((res: Response) => {
         return res || {};
       })

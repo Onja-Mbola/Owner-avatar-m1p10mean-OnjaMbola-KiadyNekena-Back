@@ -57,19 +57,30 @@
             <div class="col">
               <h3 class="card-title text-uppercase text-muted mb-0">Prendre Rendez-Vous Maintenant</h3>
             </div>
-            <div class="col-auto">
-              <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                <i class="fa fa-plus"></i>
-              </div>
-            </div>
+              <app-cart-list class="container"></app-cart-list>
           </div>
         </div>
-        <div class="card-body">
+
+        <div class="card-body" >
           <div class="col">
-            <h2> Nos Services</h2>
+            <h2> Choisissez les services en premier</h2>
           </div>
-            <div class="row">
-               <div class="col-md-12"></div>
+
+          <div class="loader-container" *ngIf="loading">
+            <div class="loader"></div>
+          </div>
+            <div *ngIf="!loading"  class="row">
+               <div class="col-md-3" *ngFor="let service of Services">
+                <div class="card" style="width: 18rem;">
+                  <img src="../../../assets/img/services/service-default.jpeg" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{service.name}}</h5>
+                    <p class="card-text">Prix : {{service.price}} AR</p>
+                    <p class="card-text">Duree : {{service.time}} mn</p>
+                    <a (click) ="addToCart(service)" class="btn btn-primary">Prendre service</a>
+                  </div>
+                </div>
+               </div>
             </div>
         </div>
       </div>

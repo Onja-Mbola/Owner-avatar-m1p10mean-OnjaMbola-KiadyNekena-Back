@@ -1,5 +1,6 @@
 module.exports = {
   secret: "manjamanja",
   secretAdmin: "manjamanja",
-  lien: '192.168.88.14',
+  lien: '127.0.0.1',
+  loginlien: 'http://localhost:4300/'
 };

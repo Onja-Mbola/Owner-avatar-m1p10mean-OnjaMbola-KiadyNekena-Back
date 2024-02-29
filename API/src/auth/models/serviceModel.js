@@ -4,6 +4,9 @@ let Service = new Schema({
   name: {
      type: String
   },
+  description: {
+     type: String
+  },
   price: {
      type: Number
   },

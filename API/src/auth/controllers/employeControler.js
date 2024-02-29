@@ -136,6 +136,17 @@ async function envoyerCodeValidationParEmail(email, objetDuMail, contenu) {
 
 }
 
+// Fonction pour récupérer la liste des utilisateurs
+exports.getListeEmploye = async (req, res) => {
+  try {
+
+      const utilisateurs = await Employe.find();
+      return res.status(200).json({ success: true, utilisateurs });
+  } catch (erreur) {
+    res.status(500).json({ success: false, message: 'Erreur lors de la récupération des utilisateurs.' });
+  }
+};
+
 
 // Fonction pour valider le compte de l'utilisateur
 exports.activateAccount = async (req, res) => {

@@ -8,7 +8,7 @@ const configJwt = require('../config/configJwt');
 const authenticateToken = require("../middlewares/authJwt");
 const authenticateAdmin = require("../middlewares/authAdmin");
 const saltRounds = 10;
-
+const Employe = require('../models/employeModel');
 
 // Fonction pour générer un code de validation aléatoire
 function genererCodeValidation() {
@@ -140,6 +140,30 @@ async function envoyerCodeValidationParEmail(email, objetDuMail, contenu) {
   }
 
 }
+// Fonction pour récupérer la liste des utilisateurs
+exports.getListeEmploye = async (req, res) => {
+  try{
+    Employe.find().select('_id firstName lastName')
+    .exec()
+    .then((data) => {
+      res.json(data);
+    })
+  }catch(error){
+    next(error);
+  }
+  // try {
+  //   const data = await Employe.find(
+  //     {
+  //       role: "employe",
+  //     }
+  //   ).select('_id firstName lastName');
+
+  //     // console.log(utilisateurs);
+  //     return res.status(200).json(data);
+  // } catch (erreur) {
+  //   res.status(500).json({ success: false, message: 'Erreur lors de la récupération des utilisateurs.' });
+  // }
+};
 
 
 // Contrôleur pour l'insertion d'un nouvel utilisateur
@@ -253,7 +277,9 @@ exports.activateAccount = async (req, res) => {
 
     await client.save();
 
-    res.status(200).json({ message: 'Compte activé avec succès. Vous pouvez maintenant vous connecter.' });
+    // res.status(200).json({ message: 'Compte activé avec succès. Vous pouvez maintenant vous connecter.' });
+    res.redirect(secretToken.loginlien);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur lors de l\'activation du compte.' });
