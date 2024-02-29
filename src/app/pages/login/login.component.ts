@@ -108,10 +108,11 @@ export class LoginComponent implements OnInit {
       });
     }
 
-
-
-
   }
+  navigateToExternalLink() {
+
+    window.location.href = 'http://localhost:4200/';
+}
   reloadPage(): void {
     window.location.reload();
   }

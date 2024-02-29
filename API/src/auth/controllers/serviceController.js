@@ -36,7 +36,7 @@ exports.createService = async (req, res) => {
   // }
   try{
     const {name,price,time,image } = req.body;
-    const newService = new Service({ name, price , time , image });
+    const newService = new Service({ name, description ,price , time , image });
     await newService.save();
     res.json({ success: true, message: req.body });
   }catch(error){

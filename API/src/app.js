@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const authRoutes = require('./auth/routes/routes');
 const serviceRoutes = require('./auth/routes/service.routes');
+const publicRoutes = require('./auth/routes/public.routes');
 const lien = require('./auth/config/configJwt');
 
 const app = express();
@@ -35,6 +36,8 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 // Routes Service
 app.use('/api/services-admin/', serviceRoutes);
+// Routes Publique
+app.use('/api/', publicRoutes);
 
 // Host
 // app.listen(port, '192.168.88.18', () => {
