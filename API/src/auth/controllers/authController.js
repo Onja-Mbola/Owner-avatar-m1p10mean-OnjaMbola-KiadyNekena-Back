@@ -303,7 +303,7 @@ exports.loginClient = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res.status(403).json({ success: false, message: 'Utilisateur non vérifié. Veuillez valider votre compte.' });
+      return res.status(403).json({ success: false, message: 'Utilisateur non vérifié. Veuillez Verfiez votre Email ou dans les Spams pour valider votre compte' });
     }
 
     const _id = user.id;

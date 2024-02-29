@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 
 function numeroValide(numero) {
-  return numero.length === 10;
+  return numero.length >= 9;
 }
 
 
