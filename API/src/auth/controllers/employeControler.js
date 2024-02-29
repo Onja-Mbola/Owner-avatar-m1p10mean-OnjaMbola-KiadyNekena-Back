@@ -221,7 +221,7 @@ exports.registerEmploye = async (req, res) => {
     await newEmploye.save();
 
     // Construire le lien d'activation
-    const activationLink = `http://${secretToken.lien}:3000/api/auth/validationEmploye?email=${email}&token=${activationToken}`;
+    const activationLink = `${secretToken.lien}/api/auth/validationEmploye?email=${email}&token=${activationToken}`;
 
     // Générer le contenu de l'e-mail
     const contenuEmail = genererContenuEmailValidation(firstName, activationLink);

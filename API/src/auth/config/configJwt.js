@@ -1,6 +1,6 @@
 module.exports = {
   secret: "manjamanja",
   secretAdmin: "manjamanja",
-  lien: '127.0.0.1',
-  loginlien: 'http://localhost:4300/'
+  lien: 'https://m1p10mean-onjambola-kiadynekena-back-2.onrender.com/',
+  loginlien: 'https://m1p10mean-onja-mbola-kiady-nekena-back-e6j9.vercel.app/login'
 };

@@ -209,7 +209,7 @@ exports.registerClient = async (req, res) => {
     await newClient.save();
 
     // Construire le lien d'activation
-    const activationLink = `http://${secretToken.lien}:3000/api/auth/validationClient?email=${email}&token=${activationToken}`;
+    const activationLink = `${secretToken.lien}/api/auth/validationClient?email=${email}&token=${activationToken}`;
 
     // Générer le contenu de l'e-mail
     const contenuEmail = genererContenuEmailValidation(firstName, activationLink);

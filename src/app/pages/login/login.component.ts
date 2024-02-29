@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit {
   }
   navigateToExternalLink() {
 
-    window.location.href = 'http://localhost:4200/';
+    window.location.href = 'https://m1p10mean-onja-mbola-kiady-nekena.vercel.app/';
 }
   reloadPage(): void {
     window.location.reload();

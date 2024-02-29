@@ -15,8 +15,8 @@ const httpOptions = {
 })
 
 export class AuthService {
-  // baseUri: string = 'http://192.168.88.14:3000/api/auth';
-  baseUri: string = 'http://localhost:3000/api/auth';
+  baseUri: string = 'https://m1p10mean-onjambola-kiadynekena-back-2.onrender.com/api/auth';
+  // baseUri: string = 'http://localhost:3000/api/auth';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   private isAuthenticated = false;
 
